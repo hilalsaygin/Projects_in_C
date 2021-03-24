@@ -51,3 +51,23 @@ double root4(double a0, double a1, double a2, double a3, double a4, double xs, d
     return root;
 }
 
+void main(){
+	double a4, a3, a2, a1, a0,xs,xe;
+	int deg;
+	printf("Is your equation cubic or quadratic? \n1.Cubic \n2.Quadratic");
+	scanf("%d",&deg);
+	if(deg==1){
+		printf("Enter the coefficients for cubic equation. \na3*x^3 +a2*x^2 +a1*x +a0 ");
+		scanf("%lf %lf %lf %lf",&a3,&a2,&a1,&a0);
+		printf("Enter limitations of the range to check if a root exist within. \n Xstart Xend ");
+		scanf("%lf %lf",&xs,&xe);
+		printf("Root found within [%lf, %lf] :",xs,xe,root3(a0,a1,a2,a3,xs,xe));
+	}
+	else if (deg==2){
+		printf("Enter the coefficients for Quadratic equation. \na4*x^4 +a3*x^3 +a2*x^2 +a1*x +a0 ");
+		scanf("%lf %lf %lf %lf %lf",&a4,&a3,&a2,&a1,&a0);
+		printf("Enter limitations of the range to check if a root exist within. \n Xstart Xend ");
+		scanf("%lf %lf",&xs,&xe);
+		printf("Root found within [%lf, %lf] :",xs,xe,root4(a0,a1,a2,a3,a4,xs,xe));
+	}
+}
