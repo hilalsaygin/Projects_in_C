@@ -1,0 +1,130 @@
+#include <stdio.h>
+#include <math.h>
+#include "valid_date.h"
+int count_day_between_dates(int start_day, int start_month, int start_year, int end_day, int end_month, int end_year)
+{
+
+/* To find the number of days between 2 given days; First find the number of days from 00/00/0000 to start_date 
+and the number of days up until end_date. Then substract, end_date_num - start_date_num. 
+Common year have 365 days and Leap years have 366 days. So add 1 to day_num for leap years
+Then the formula to find num of days until a date: year*365 + days_in_month + day +num_of_leap_years  */	
+
+
+	/* A year is Leap year if it's evenly divisible by 4 and not 100 except if it's divisible by 400
+	Number of Leap years up until a date if month Jun or Feb, month<=2, (year-1)/4 - (year-1)/100 + (year-1)/400
+	Number of Leap years up until a date on other months, month >2, (year/4) - (year/100) + (year/400)   */
+
+	int check_start_day_month=check_date(start_day,start_month,start_year); /*checks if given start date is valid*/
+
+	int check_end_day_month=check_date(end_day,end_month,end_year); /*checks if given end date is valid*/
+
+	/* they represent if given start and end year is common or leap. if it's common, they keep 1 otherwise zero.*/
+	int start_y_commleap=1, end_y_commleap=1; 
+
+	int start_leap_num=0, end_leap_num=0; /* start_leap_num: num of leap years until startdate. end_leap_num: num of leap years until end date. */
+
+	unsigned long int start_date_daynum=0, end_date_daynum=0;/* keep tot day number up until the date for each given date*/
+	
+	/* stmonth_30day: number of months in start_year has 30 days before start_month. stmonth_31day: num of months has 31 days*/
+	/* endmonth_30day: number of months in end_year has 30 days before end_month. endmonth_31day: num of months has 31 days*/
+	int stmonth_30day=0,stmonth_31day=0,endmonth_30day=0,endmonth_31day=0; 
+
+	
+/*checking if the start and end date is in leap year*/	
+
+	if ((start_year%4==0 && start_year%100!=0) || start_year%400 ==0)    
+		start_y_commleap=0;
+
+	if ((end_year%4==0 && end_year%100!=0) || end_year%400 ==0)    
+		end_y_commleap=0;
+		
+
+/* For start_date; if it's leap year, 29th Feb exist so check_start_day_month is 1. */
+
+	if(start_y_commleap==0 && start_day>0 ){  
+		if (start_month==2 && start_day<=29){
+			check_start_day_month=1;
+		}	
+	}
+
+	
+/* For end_date; if it's leap year, 29th Feb exist so check_end_day_month is 1. */
+
+	if(end_y_commleap==0 && end_day>0 ){ 
+		if (end_month==2 && end_day<=29){
+			check_end_day_month=1;
+		}	
+	}
+
+/* When start and end dates are valid calculations are done.   */	
+
+	if (check_start_day_month && check_end_day_month ){	
+
+	/*calculating num of leap years before start_year*/		
+
+		if (start_month<=2){
+			start_leap_num=((start_year-1)/4) - ((start_year-1)/100)+ ((start_year-1)/400);
+		}
+		else{
+			start_leap_num=(start_year/4) - (start_year/100) + (start_year/400);
+		}
+		
+	/*calculating num of leap years before end_year*/		
+
+		if (end_month<=2){
+			end_leap_num=((end_year-1)/4) - ((end_year-1)/100)+ ((end_year-1)/400);
+		}
+		else{
+			end_leap_num=(end_year/4) - (end_year/100) + (end_year/400);
+		}		
+
+
+		int count; 
+	/*finds how many 30day month and how many 31 day month exist before start_month in the given year. */
+		for(count=1;count<start_month; count++){
+			switch (count){		
+				case 4: case 6: case 9: case 11: /*months that has 30 days. if count== one of them, month_30day+1 */
+					stmonth_30day++;
+					break;
+
+				case 1: case 3: case 5: case 7: case 8: case 10: case 12: /*months that has 31 days. if count== one of them, month_30day+1 */
+					stmonth_31day++;
+					break;
+			}
+		}
+
+	/*finds how many 30day month and how many 31 day month exist before end_month in the given year. */	
+		for(count=1;count<end_month; count++){
+			switch (count){
+				case 4: case 6: case 9: case 11: /*months that has 30 days. if count== one of them, month_30day+1 */
+					endmonth_30day++;
+					break;
+
+				case 1: case 3: case 5: case 7: case 8: case 10: case 12: /*months that has 31 days. if count== one of them, month_30day+1 */
+					endmonth_31day++;
+					break;
+			}
+		}
+
+
+	/*calculating days before start_date and end_date. Start and End Day are not counted. */
+
+		start_date_daynum= start_year*365 + stmonth_30day*30 + stmonth_31day*31 + start_day + start_leap_num;
+
+		end_date_daynum= end_year*365 + endmonth_30day*30 + endmonth_31day*31  + end_day-1 + end_leap_num;
+
+		if (start_month>2)
+			start_date_daynum+=28;
+
+		if (end_month>2)
+			end_date_daynum+=28;
+		
+  /* Substraction of the values is the number of days between dates.*/
+    	return (end_date_daynum-start_date_daynum);
+	}
+
+	else 
+		printf("Given start or end date not valid!! Number of days between couldn't calculated!\n");
+}
+
+/*---------------------------------------------------------------------------------------*/
