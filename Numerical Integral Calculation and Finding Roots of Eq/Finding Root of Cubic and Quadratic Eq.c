@@ -6,8 +6,8 @@
 #include <stdio.h>
 #include "F3_F4.h"
 /* ----------------  -----------------  -----------------  ----------------- */
- 
-double root3 (double a0, double a1, double a2, double a3, double xs, double xe)  /* In he form of >  a3*x^3 + a2*x^2 + a1*x +a0	 */	
+ /* root3() and root4() find one root within specified range for degree3 and degree4 polynomials .*/
+double root3 (double a0, double a1, double a2, double a3, double xs, double xe)  /* In the form of >  a3*x^3 + a2*x^2 + a1*x +a0	 */	
 {	 /* finds the root of a cubic eq. with coefficients a4,a3,a2,a1,a0 within given range [xs,xe] and return the root */
 	/* BISECTION METHOD */  
 	double mid,root,checking=0;
