@@ -1,1 +1,136 @@
+/*
 
+** hw2_lib.c:
+
+** The source file implementing library functions.
+
+** Implemented by Hilal Saygin
+*/
+#include <stdio.h>
+#include <math.h>
+#include "valid_date.h"
+
+
+
+
+int find_weekday_of_data(int day, int month, int year)
+{
+
+/* Gauss's Algorithm Implementation to find the day of a given date*/
+
+	int common_leap=1; /* if common_leap==1 year is commonyear. if commonleap==0, year is leapyear*/
+
+	int day_month_valid=check_date(day,month,year); /* For the year; if given day exist in the month, check_day_month is 1 otherwise zero. If day>31,it's zero. */
+
+	int month_represent;   /* The variable that keeps the number corresponding to given month 
+
+	according to Gauss's Approach to calculate weekday of any date. For Example Jan in common years represented by 0 to use in calc. */
+
+	
+/* Checking if the given year is a leap year if so common_leap=0 */	
+	if ((year%4==0 && year%100!=0) || year%400 ==0)    
+		common_leap=0;	
+
+/* For leap years 29th Feb exist so day_month_valid is 1. */
+	if(common_leap==0 && day>0 ){  
+		if (month==2 && day<=29){
+			day_month_valid=1;
+		}	
+	}
+
+
+/* For common years months represented by integers according to Gauss's Approach for calculations as follows; 
+	Jan-Oct:0, May:1, Aug:2, Feb-Mar-Nov:3, Jun:4, Sep-Dec:5, Apr-Jul:6  */
+																	
+	if(day_month_valid && common_leap){ /* finds corresponding number of the month when given year is a Common year.*/
+		switch (month){
+			case 1: case 10:  /* If month is Jan or Oct, then it's represented with 0. Same perspective followed for other months */
+				month_represent=0;
+				break;
+
+			case 5:
+				month_represent=1;
+				break;
+
+			case 8:
+				month_represent=2;
+				break;
+
+			case 2: case 3: case 11:
+				month_represent=3;
+				break;
+
+			case 6:
+				month_represent=4;
+				break;
+
+			case 9: case 12:
+				month_represent=5;
+				break;
+
+			case 4: case 7:
+				month_represent=6;
+				break;				
+		}		
+	}
+
+/* For leap years months represented by integers according to Gauss's Approach for calculations as follows; 
+	Jan-Apr-Jul:0, Oct:1, May:2, Feb-Aug:3, Mar-Nov:4, Jun:5, Sep-Dec:6  */
+
+	else if (day_month_valid && common_leap==0){  /* finds corresponding number of the month when given year is a Leap year.*/
+		switch (month){
+			case 1: case 4: case 7: /* If month is Jan,Apr or Jul, then it's represented with 0.Same perspective followed for other months */
+				month_represent=0;
+				break;
+
+			case 10:
+				month_represent=1;
+				break;
+
+			case 5:
+				month_represent=2;
+				break;
+
+			case 2: case 8:
+				month_represent=3;
+				break;
+
+			case 3: case 11:
+				month_represent=4;
+				break;
+
+			case 6:
+				month_represent=5;
+				break;
+
+			case 9: case 12:
+				month_represent=6;
+				break;				
+		}		
+	}
+
+/* if calculated weekday_num >>> 0:Sunday, 1:Monday, 2:Tuesday, 3:Wednesday, 4:Thursday, 5:friday , 6:saturday .  */		
+	int calc_for_the_weekday, weekday_num;
+
+
+/* By the Gauss's Algorithm, using given day/month/year calculations are done. 
+Mod 7 of the calculated value,which is kept in calc_for_the_weekday, gives number representation of the day.  */
+
+	if(day_month_valid){
+		calc_for_the_weekday= day + month_represent + (5*((year -1)%4)) + (4*((year-1)%100)) + (6*((year-1)%400)); 
+		weekday_num = calc_for_the_weekday %7;
+
+		if(weekday_num==0)
+			return 7;
+		else 
+			return weekday_num;
+	}
+	else 
+		printf("Year %d or the Month %d  or the day number %d is not valid, Check Again !!  ",year,month,day);	
+}
+/*---------------------------------------------------------------------------------------*/
+
+
+void main(){
+	
+}
