@@ -1,1 +1,47 @@
+/*
+** 
+** By Hilal Saygin
+*/
+
+#include <stdio.h>
+#include "F3_F4.h"
+
+double integral3(double a0, double a1, double a2, double a3, double xs, double xe, double delta)
+{    /* In he form of >  a3*x^3 + a2*x^2 + a1*x +a0.  delta is  lenght of sub-intervals in the range [xs-xe] */	
+	/* Trapezoidal Approach for calculating the numeric calculation of integral of the given eq. within range [xs,xe] */
+
+	double number = (xe-xs)/delta, x, summ;  /* number is the num. of sub intervals */
+	int i_count=1;
+
+	for (i_count; i_count<number; i_count++){  /*calculate the sum of numeric values in the function from element xs+1 to element xe-1 */
+		x= xs + i_count*delta;
+		summ+= 2*f3(a0,a1,a2,a3,x);				
+	}
+	double first_last_element= f3(a0,a1,a2,a3,xs) + f3(a0,a1,a2,a3,xe);
+	double valueof_integral= (first_last_element+summ)*(delta/2.0);
+	
+    return valueof_integral;
+
+}	
+
+/* ----------------  -----------------  -----------------  ----------------- */
+
+double integral4(double a0, double a1, double a2, double a3, double a4, double xs, double xe, double delta) 
+{	 /* In he form of >  a4*x^4 + a3*x^3 + a2*x^2 + a1*x +a0  */																	
+	/* Trapezoidal Approach for calculating the numeric calculation of integral of the given eq. within range [xs,xe] */
+    double interval_num = (xe-xs)/delta, x, summ;    /* interval_num is the number of sub intervals */
+	int i_count=1;
+
+	
+	for (i_count; i_count<interval_num; i_count++){  /*calculate the sum of numeric values in the function from element xs+1 to element xe-1 */
+		x= xs + i_count*delta;
+		summ+= 2*f4(a0,a1,a2,a3,a4,x);				
+	}
+	double first_last_element= f4(a0,a1,a2,a3,a4,xs) + f4(a0,a1,a2,a3,a4,xe);
+	double valueof_integral= (first_last_element+summ)*(delta/2.0);
+	
+    return valueof_integral;
+    
+
+}
 
